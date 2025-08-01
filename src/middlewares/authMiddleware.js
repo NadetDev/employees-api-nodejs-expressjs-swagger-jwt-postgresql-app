@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ErrorResponse = require('../utils/ErrorResponse');
+const { unauthorized, unauthorizedRole } = require('../utils/apiResponse');
 
 // Protect routes - verify JWT
 const protect = async (req, res, next) => {
@@ -13,7 +13,7 @@ const protect = async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    return unauthorized('Not authorized to access this route');  
   }
 
   try {
@@ -21,7 +21,7 @@ const protect = async (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return next(new ErrorResponse('Not authorized to access this route', 401));
+    return unauthorized('Not authorized to access this route');  
   }
 };
 
@@ -29,7 +29,7 @@ const protect = async (req, res, next) => {
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new ErrorResponse(`User role ${req.user.role} is not authorized`, 403));
+      return unauthorizedRole(`User role ${req.user.role} is not authorized`)
     }
     next();
   };

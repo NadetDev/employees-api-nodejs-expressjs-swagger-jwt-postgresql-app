@@ -26,6 +26,13 @@ module.exports = {
     });
   },
 
+  unauthorizedRole: (res, message = 'Unauthorized') => {
+    return res.status(403).json({
+      success: false,
+      message
+    });
+  },
+
   /**
    * Réponse Not Found (404)
    * @param {object} res - L'objet réponse Express

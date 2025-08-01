@@ -116,6 +116,61 @@ Accédez à la documentation interactive :
 | `npm run dev` | Lance le serveur en développement |
 | `docker-compose up -d` | Lance les containers |
 | `docker-compose down` | Arrête les containers |
+| `kubectl apply -f k8s/` | Déploie sur Kubernetes |
+| `minikube service employee-api --url` | Affiche l'URL du service |
+
+## Déploiement Kubernetes (Minikube)
+
+```bash
+# 1. Initialiser Minikube
+minikube start --driver=docker
+minikube addons enable ingress
+
+# 2. Configurer l'environnement Docker
+minikube docker-env | Invoke-Expression
+
+# 3. Builder l'image
+docker build -t employee-api .
+
+# 4. Déployer
+kubectl apply -f k8s/
+
+# 5. Accéder à l'application
+minikube service employee-api
+```
+
+## Workflow de développement
+
+1. Après modifications du code :
+```bash
+docker build -t employee-api .
+kubectl rollout restart deployment/employee-api
+kubectl logs -f deployment/employee-api
+```
+
+2. Pour recréer complètement l'environnement :
+```bash
+kubectl delete -f k8s/
+kubectl apply -f k8s/
+```
+
+## Dépannage
+
+### Erreurs de connexion PostgreSQL
+```bash
+# Vérifier les logs
+kubectl logs deployment/employee-api
+
+# Tester la connexion à la DB
+kubectl run pg-test --rm -it --image=postgres:13-alpine -- sh -c 'psql -h postgres -U postgres'
+```
+
+### Problèmes d'Ingress
+```bash
+# Réinitialiser la configuration
+minikube addons disable ingress
+minikube addons enable ingress
+```
 
 ## Licence
 
