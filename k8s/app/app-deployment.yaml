@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-api
+  template:
+    metadata:
+      labels:
+        app: employee-api
+    spec:
+      containers:
+      - name: employee-api
+        image: nadetdev/employee-api:latest
+        imagePullPolicy: IfNotPresent  # Pour utiliser l'image locale
+        env:
+        - name: DB_HOST
+          value: "db-employee"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: password
+        - name: DB_NAME
+          value: "employee_void_db"
+        - name: NODE_ENV
+          value: "production"
+        ports:
+        - containerPort: 3000
