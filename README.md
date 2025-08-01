@@ -67,6 +67,18 @@ USER_ROLE=user
 ## Structure du code
 
 ```
+k8s/
+├── app/
+│   ├── deployment.yaml          # Config mise à jour avec probes
+│   └── service.yaml             # NodePort 3000-32767
+├── postgres/
+│   ├── deployment.yaml          # PVC intégré
+│   └── service.yaml             # Service "postgres"
+├── secrets/
+│   ├── db-secrets.yaml          # Secrets encodés en base64
+│   └── pvc.yaml                 # Volume persistant 5Gi
+└── ingress.yaml                 # Rules pour /api et /api-docs
+│                
 src/
 ├── config/        # Configuration
 │   ├── db.js      # Connexion DB
@@ -162,7 +174,7 @@ kubectl apply -f k8s/
 kubectl logs deployment/employee-api
 
 # Tester la connexion à la DB
-kubectl run pg-test --rm -it --image=postgres:13-alpine -- sh -c 'psql -h postgres -U postgres'
+kubectl run pg-test --rm -it --image=postgres:17-alpine -- sh -c 'psql -h postgres -U postgres'
 ```
 
 ### Problèmes d'Ingress
