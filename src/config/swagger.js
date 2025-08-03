@@ -9,8 +9,15 @@ module.exports = {
       }
     },
     servers: [
-      { url: 'http://localhost:3000/api/v1' }
-    ]
+      {
+        url: 'http://employee-api.local/api',  // URL Kubernetes
+        description: 'Kubernetes cluster'
+      },
+      {
+        url: 'http://localhost:3000/api',     // URL locale
+        description: 'Local development'
+      }
+    ],
   },
   apis: [
     './src/routes/*.js',

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-api-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: employee-api  # Doit matcher vos labels de deployment
+  ports:
+    - protocol: TCP
+      port: 80         # Port externe
+      targetPort: 3000 # Port du conteneur
+  externalTrafficPolicy: Local

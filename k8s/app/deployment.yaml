@@ -16,6 +16,8 @@ spec:
       - name: employee-api
         image: nadetdev/employee-api:latest
         imagePullPolicy: IfNotPresent  # Pour utiliser l'image locale
+        ports:
+        - containerPort: 3000  # Doit correspondre au port de votre application
         env:
         - name: DB_HOST
           value: "db-employee"
